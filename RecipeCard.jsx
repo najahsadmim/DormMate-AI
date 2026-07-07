@@ -11,10 +11,10 @@ const RecipeCard = ({ recipe }) => {
         </div>
         
         <div className="grid grid-cols-2 gap-y-2 text-xs font-poppins text-gray-600 mb-4">
-          <p>💰 <span className="font-semibold text-forestGreen">Tk {recipe.cost}</span></p>
-          <p>🔥 <span className="font-semibold text-forestGreen">{recipe.calories} kcal</span></p>
-          <p>💪 <span className="font-semibold text-forestGreen">Prot {recipe.protein}g</span></p>
-          <p>⏱️ <span className="font-semibold text-forestGreen">{recipe.time} min</span></p>
+          <p><span className="font-semibold text-forestGreen">Tk {recipe.cost}</span></p>
+          <p><span className="font-semibold text-forestGreen">{recipe.calories} kcal</span></p>
+          <p><span className="font-semibold text-forestGreen">Prot {recipe.protein}g</span></p>
+          <p></p> <span className="font-semibold text-forestGreen">{recipe.time} min</span></p>
         </div>
         
         {recipe.healthyChoice && (
