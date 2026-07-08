@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 import RecipeCard from '../components/RecipeCard';
+import recipes from '../data/recipes.json'; // Import the "Source of Truth"
 
 const HomePage = () => {
   const [budget, setBudget] = useState(250);
 
-  const trendingRecipes = [
-    { name: "Chicken Khichuri", cost: 120, calories: 420, protein: 28, time: 25, rating: 4.8, healthyChoice: true, image: "https://via.placeholder.com/300x200?text=Khichuri" },
-    { name: "Egg Fried Rice", cost: 80, calories: 350, protein: 15, time: 15, rating: 4.5, healthyChoice: false, image: "https://via.placeholder.com/300x200?text=EggRice" },
-    { name: "Veggie Noodles", cost: 60, calories: 300, protein: 10, time: 12, rating: 4.2, healthyChoice: true, image: "https://via.placeholder.com/300x200?text=Noodles" },
-    { name: "One-Pot Pasta", cost: 150, calories: 500, protein: 20, time: 20, rating: 4.7, healthyChoice: false, image: "https://via.placeholder.com/300x200?text=Pasta" },
-  ];
+  // We pick the first recipe from our JSON to be the "Recipe of the Week"
+  const featuredRecipe = recipes[0];
 
   return (
     <div className="bg-white min-h-screen font-poppins pb-20">
@@ -54,17 +51,21 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* Recipe of the Week (Featured) */}
+      {/* Recipe of the Week (Now Dynamic) */}
       <section className="px-6 py-8 max-w-6xl mx-auto">
         <h3 className="text-2xl font-bold text-forestGreen mb-6">Recipe of the Week</h3>
         <div className="relative h-64 md:h-80 w-full rounded-3xl overflow-hidden group cursor-pointer shadow-xl">
-          <img src="https://via.placeholder.com/1200x400?text=Featured+Healthy+Meal" className="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="Featured" />
+          <img 
+            src={featuredRecipe.image} 
+            className="w-full h-full object-cover group-hover:scale-105 transition duration-500" 
+            alt="Featured" 
+          />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-8 text-white">
-            <h4 className="text-3xl font-bold mb-2">Quinoa & Roasted Veggie Bowl</h4>
-            <p className="text-sm opacity-90 mb-4">Budget friendly, High Protein, Ready in 20 mins.</p>
+            <h4 className="text-3xl font-bold mb-2">{featuredRecipe.title}</h4>
+            <p className="text-sm opacity-90 mb-4">{featuredRecipe.description}</p>
             <div className="flex gap-3">
-              <span className="bg-tangerine px-3 py-1 rounded-full text-xs font-bold">Tk 110</span>
-              <span className="bg-forestGreen px-3 py-1 rounded-full text-xs font-bold">450 kcal</span>
+              <span className="bg-tangerine px-3 py-1 rounded-full text-xs font-bold">Tk {featuredRecipe.estimatedCost}</span>
+              <span className="bg-forestGreen px-3 py-1 rounded-full text-xs font-bold">{featuredRecipe.calories} kcal</span>
             </div>
           </div>
         </div>
@@ -76,9 +77,11 @@ const HomePage = () => {
           <h3 className="text-2xl font-bold text-forestGreen">Recommended For You</h3>
           <button className="text-tangerine font-bold text-sm hover:underline">View All</button>
         </div>
+        
+        {/* This now maps through the imported JSON file instead of hardcoded data */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {trendingRecipes.map((recipe, index) => (
-            <RecipeCard key={index} recipe={recipe} />
+          {recipes.map((recipe) => (
+            <RecipeCard key={recipe.id} recipe={recipe} />
           ))}
         </div>
       </section>
