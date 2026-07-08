@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import RecipeCard from './RecipeCard';
+import RecipeCard from '../components/RecipeCard';
 
 const HomePage = () => {
   const [budget, setBudget] = useState(250);
