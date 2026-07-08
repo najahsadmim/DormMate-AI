@@ -1,0 +1,387 @@
+[
+  {
+    "id": 1,
+    "title": "Chicken Khichuri",
+    "description": "A comforting one-pot meal perfect for cold nights and exam seasons. Nutritious and filling.",
+    "estimatedCost": 120,
+    "calories": 420,
+    "protein": 28,
+    "cookingTime": 25,
+    "difficulty": "Easy",
+    "image": "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=800&q=80",
+    "ingredients": [
+      "1 cup Rice",
+      "1/2 cup Lentils (Dal)",
+      "200g Chicken pieces",
+      "1 Onion, sliced",
+      "1 tsp Turmeric",
+      "2 cloves Garlic",
+      "Salt and Pepper"
+    ],
+    "steps": [
+      "Sauté sliced onions and garlic until golden.",
+      "Add chicken and turmeric, cooking until chicken is seared.",
+      "Stir in washed rice and lentils.",
+      "Add 3 cups of water and simmer until water is absorbed and rice is soft."
+    ],
+    "tags": ["Halal", "High-Protein", "Comfort Food"],
+    "healthyChoice": true
+  },
+  {
+    "id": 2,
+    "title": "Egg Fried Rice",
+    "description": "The ultimate dorm staple. Quick, cheap, and uses only one pan.",
+    "estimatedCost": 80,
+    "calories": 350,
+    "protein": 15,
+    "cookingTime": 15,
+    "difficulty": "Easy",
+    "image": "https://images.unsplash.com/photo-1603133872878-684f1aCef97a?auto=format&fit=crop&w=800&q=80",
+    "ingredients": [
+      "2 cups Cooked Rice",
+      "2 Eggs, beaten",
+      "1 Carrot, diced",
+      "1 tbsp Soy Sauce",
+      "1 tbsp Oil"
+    ],
+    "steps": [
+      "Heat oil in a pan and scramble the eggs.",
+      "Add diced carrots and sauté for 2 minutes.",
+      "Toss in cooked rice and soy sauce.",
+      "Stir-fry on high heat for 3-5 minutes."
+    ],
+    "tags": ["Vegetarian", "Low-Budget", "Quick"],
+    "healthyChoice": false
+  },
+  {
+    "id": 3,
+    "title": "Veggie Noodles",
+    "description": "A light and spicy noodle dish packed with seasonal vegetables.",
+    "estimatedCost": 60,
+    "calories": 300,
+    "protein": 10,
+    "cookingTime": 12,
+    "difficulty": "Easy",
+    "image": "https://images.unsplash.com/photo-1552611052-374156436532?auto=format&fit=crop&w=800&q=80",
+    "ingredients": [
+      "1 pack Instant Noodles",
+      "1/4 Cabbage, shredded",
+      "1 Green Chili",
+      "1 tbsp Oil",
+      "Noodle seasoning"
+    ],
+    "steps": [
+      "Boil noodles and drain.",
+      "Sauté cabbage and chili in oil.",
+      "Add seasoning and noodles.",
+      "Mix well and serve hot."
+    ],
+    "tags": ["Vegan", "Low-Budget", "Quick"],
+    "healthyChoice": true
+  },
+  {
+    "id": 4,
+    "title": "One-Pot Pasta",
+    "description": "No straining required. Pasta and sauce cook together for maximum flavor.",
+    "estimatedCost": 150,
+    "calories": 500,
+    "protein": 20,
+    "cookingTime": 20,
+    "difficulty": "Medium",
+    "image": "https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=800&q=80",
+    "ingredients": [
+      "200g Pasta",
+      "1 cup Pasta Sauce",
+      "2 cups Water",
+      "1 tsp Oregano",
+      "Grated Cheese"
+    ],
+    "steps": [
+      "Combine pasta, sauce, and water in a pot.",
+      "Bring to a boil, then simmer for 10-12 minutes.",
+      "Stir occasionally to prevent sticking.",
+      "Top with cheese and oregano."
+    ],
+    "tags": ["Vegetarian", "Comfort Food"],
+    "healthyChoice": false
+  },
+  {
+    "id": 5,
+    "title": "Peanut Butter Banana Toast",
+    "description": "The perfect energy-boosting breakfast for early morning lectures.",
+    "estimatedCost": 40,
+    "calories": 280,
+    "protein": 12,
+    "cookingTime": 5,
+    "difficulty": "Easy",
+    "image": "https://images.unsplash.com/photo-1525351484163-7529414344f8?auto=format&fit=crop&w=800&q=80",
+    "ingredients": [
+      "2 slices Whole Wheat Bread",
+      "2 tbsp Peanut Butter",
+      "1 Banana, sliced",
+      "Honey (optional)"
+    ],
+    "steps": [
+      "Toast the bread slices.",
+      "Spread peanut butter evenly on each slice.",
+      "Top with banana slices.",
+      "Drizzle honey if desired."
+    ],
+    "tags": ["Vegan", "High-Protein", "Quick"],
+    "healthyChoice": true
+  },
+  {
+    "id": 6,
+    "title": "Oatmeal with Berries",
+    "description": "Heart-healthy breakfast that keeps you full until lunch.",
+    "estimatedCost": 70,
+    "calories": 310,
+    "protein": 14,
+    "cookingTime": 10,
+    "difficulty": "Easy",
+    "image": "https://images.unsplash.com/photo-1517673132405-a56a62b73a66?auto=format&fit=crop&w=800&q=80",
+    "ingredients": [
+      "1/2 cup Oats",
+      "1 cup Milk or Water",
+      "Handful of Blueberries",
+      "1 tsp Honey"
+    ],
+    "steps": [
+      "Boil milk or water in a small pot.",
+      "Add oats and simmer for 5 minutes.",
+      "Pour into a bowl and top with berries.",
+      "Drizzle honey on top."
+    ],
+    "tags": ["Vegetarian", "High-Protein"],
+    "healthyChoice": true
+  },
+  {
+    "id": 7,
+    "title": "Masala Omelette",
+    "description": "A spicy, protein-packed start to your day.",
+    "estimatedCost": 50,
+    "calories": 210,
+    "protein": 18,
+    "cookingTime": 8,
+    "difficulty": "Easy",
+    "image": "https://images.unsplash.com/photo-1510629954389-c362181756c9?auto=format&fit=crop&w=800&q=80",
+    "ingredients": [
+      "2 Eggs",
+      "1 Green Chili, chopped",
+      "1 tbsp Onion, chopped",
+      "1/4 tsp Turmeric",
+      "Salt"
+    ],
+    "steps": [
+      "Whisk eggs with onion, chili, turmeric, and salt.",
+      "Heat oil in a pan.",
+      "Pour egg mixture and cook for 2 mins per side.",
+      "Fold and serve with toast."
+    ],
+    "tags": ["Halal", "High-Protein", "Low-Budget"],
+    "healthyChoice": true
+  },
+  {
+    "id": 8,
+    "title": "Chickpea Salad",
+    "description": "Fresh, crunchy, and incredibly cheap. Great for lunch between classes.",
+    "estimatedCost": 60,
+    "calories": 320,
+    "protein": 15,
+    "cookingTime": 10,
+    "difficulty": "Easy",
+    "image": "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80",
+    "ingredients": [
+      "1 can Chickpeas, drained",
+      "1 Cucumber, diced",
+      "1 Tomato, diced",
+      "Lemon juice",
+      "Olive oil"
+    ],
+    "steps": [
+      "Rinse chickpeas and place in a bowl.",
+      "Add diced cucumber and tomato.",
+      "Mix in lemon juice, olive oil, salt, and pepper.",
+      "Toss and serve chilled."
+    ],
+    "tags": ["Vegan", "Low-Budget", "Healthy"],
+    "healthyChoice": true
+  },
+  {
+    "id": 9,
+    "title": "Tuna Sandwich",
+    "description": "Quick protein hit. No cooking required!",
+    "estimatedCost": 110,
+    "calories": 380,
+    "protein": 25,
+    "cookingTime": 5,
+    "difficulty": "Easy",
+    "image": "https://images.unsplash.com/photo-1528735602780-2552da987766?auto=format&fit=crop&w=800&q=80",
+    "ingredients": [
+      "1 can Tuna, drained",
+      "1 tbsp Mayonnaise",
+      "2 slices Bread",
+      "Lettuce leaf"
+    ],
+    "steps": [
+      "Mix tuna with mayonnaise in a bowl.",
+      "Place lettuce on a slice of bread.",
+      "Spread tuna mixture over lettuce.",
+      "Cover with second slice of bread."
+    ],
+    "tags": ["Halal", "High-Protein", "Quick"],
+    "healthyChoice": false
+  },
+  {
+    "id": 10,
+    "title": "Vegetable Stir-Fry",
+    "description": "Clean out your fridge with this versatile stir-fry.",
+    "estimatedCost": 90,
+    "calories": 250,
+    "protein": 8,
+    "cookingTime": 15,
+    "difficulty": "Easy",
+    "image": "https://images.unsplash.com/photo-1512058560366-cd247059a83b?auto=format&fit=crop&w=800&q=80",
+    "ingredients": [
+      "Mixed Frozen Veggies",
+      "1 tbsp Soy Sauce",
+      "1 tsp Ginger, minced",
+      "1 tbsp Oil"
+    ],
+    "steps": [
+      "Heat oil and sauté ginger.",
+      "Add frozen vegetables and stir-fry on high heat.",
+      "Pour in soy sauce and toss until glazed.",
+      "Serve as is or with rice."
+    ],
+    "tags": ["Vegan", "Low-Budget"],
+    "healthyChoice": true
+  },
+  {
+    "id": 11,
+    "title": "Paneer Bhurji",
+    "description": "Scrambled cottage cheese with spices. A protein-rich vegetarian delight.",
+    "estimatedCost": 140,
+    "calories": 380,
+    "protein": 22,
+    "cookingTime": 15,
+    "difficulty": "Medium",
+    "image": "https://images.unsplash.com/photo-1631452183976-74f2f9e7936c?auto=format&fit=crop&w=800&q=80",
+    "ingredients": [
+      "100g Paneer, crumbled",
+      "1 Onion, finely chopped",
+      "1 Tomato, chopped",
+      "1/2 tsp Cumin",
+      "1/2 tsp Chili powder"
+    ],
+    "steps": [
+      "Heat oil and sauté cumin and onions.",
+      "Add tomatoes and cook until soft.",
+      "Stir in chili powder and crumbled paneer.",
+      "Cook for 5 minutes and garnish with coriander."
+    ],
+    "tags": ["Vegetarian", "High-Protein"],
+    "healthyChoice": true
+  },
+  {
+    "id": 12,
+    "title": "Greek Yogurt Parfait",
+    "description": "Refreshing and high in probiotics. Perfect for a quick snack.",
+    "estimatedCost": 80,
+    "calories": 220,
+    "protein": 15,
+    "cookingTime": 5,
+    "difficulty": "Easy",
+    "image": "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=800&q=80",
+    "ingredients": [
+      "1 cup Greek Yogurt",
+      "1/4 cup Granola",
+      "Fresh berries",
+      "Honey"
+    ],
+    "steps": [
+      "Spoon yogurt into a glass.",
+      "Add a layer of granola.",
+      "Top with fresh berries.",
+      "Drizzle with honey."
+    ],
+    "tags": ["Vegetarian", "High-Protein", "Quick"],
+    "healthyChoice": true
+  },
+  {
+    "id": 13,
+    "title": "Mushroom Toast",
+    "description": "Sophisticated but simple. Great for a weekend brunch.",
+    "estimatedCost": 100,
+    "calories": 310,
+    "protein": 12,
+    "cookingTime": 12,
+    "difficulty": "Medium",
+    "image": "https://images.unsplash.com/photo-1504754524776-8f4f37793ca1?auto=format&fit=crop&w=800&q=80",
+    "ingredients": [
+      "100g Mushrooms, sliced",
+      "1 clove Garlic",
+      "Butter",
+      "2 slices Sourdough bread"
+    ],
+    "steps": [
+      "Sauté garlic in butter.",
+      "Add mushrooms and cook until brown.",
+      "Toast the bread slices.",
+      "Place mushrooms on toast and season."
+    ],
+    "tags": ["Vegetarian", "Low-Budget"],
+    "healthyChoice": true
+  },
+  {
+    "id": 14,
+    "title": "Lentil Soup (Dal)",
+    "description": "Pure nutrition. One of the most affordable and healthy meals globally.",
+    "estimatedCost": 50,
+    "calories": 280,
+    "protein": 18,
+    "cookingTime": 30,
+    "difficulty": "Easy",
+    "image": "https://images.unsplash.com/photo-1547592166-23ac457 Uninstall_6b?auto=format&fit=crop&w=800&q=80",
+    "ingredients": [
+      "1 cup Yellow Lentils",
+      "3 cups Water",
+      "Turmeric",
+      "Garlic",
+      "Salt"
+    ],
+    "steps": [
+      "Boil lentils with water and turmeric until mushy.",
+      "In a separate pan, sauté garlic in oil.",
+      "Pour the garlic oil into the boiled lentils.",
+      "Stir and simmer for 5 minutes."
+    ],
+    "tags": ["Vegan", "Halal", "Low-Budget", "Healthy"],
+    "healthyChoice": true
+  },
+  {
+    "id": 15,
+    "title": "Quick Quesadilla",
+    "description": "Cheesy and satisfying. Perfect for a midnight snack.",
+    "estimatedCost": 110,
+    "calories": 450,
+    "protein": 18,
+    "cookingTime": 10,
+    "difficulty": "Easy",
+    "image": "https://images.unsplash.com/photo-159997459722 opportunistic-8?auto=format&fit=crop&w=800&q=80",
+    "ingredients": [
+      "2 Tortillas",
+      "1/2 cup Shredded Cheese",
+      "Canned beans or corn",
+      "Butter"
+    ],
+    "steps": [
+      "Butter one side of the tortillas.",
+      "Place one tortilla butter-side down in a pan.",
+      "Sprinkle cheese and beans on top.",
+      "Cover with second tortilla and flip when golden brown."
+    ],
+    "tags": ["Vegetarian", "Quick", "Comfort Food"],
+    "healthyChoice": false
+  }
+]
