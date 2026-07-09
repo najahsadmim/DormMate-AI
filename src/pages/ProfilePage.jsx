@@ -39,7 +39,7 @@ const ProfilePage = () => {
   return (
     <div className="px-6 py-12 max-w-2xl mx-auto font-poppins">
       <h2 className="text-4xl font-bold text-tangerine mb-2">My Profile</h2>
-      <p className="text-forestGreen font-semibold mb-8">Personalize your AI experience.</p>
+      <p className="text-forestGreen font-semibold mb-8">Personalize your experience.</p>
       
       <div className="bg-white shadow-md rounded-3xl p-8 border border-gray-100 space-y-6">
         
@@ -154,7 +154,7 @@ const ProfilePage = () => {
         <div className="pt-6">
           <div className="bg-orange-50 p-4 rounded-2xl border border-orange-100 text-center">
             <p className="text-xs text-tangerine font-bold italic">
-              ✨ Your preferences are synced in real-time with the AI assistant.
+              ✨ Your preferences are synced in real-time.
             </p>
           </div>
         </div>
