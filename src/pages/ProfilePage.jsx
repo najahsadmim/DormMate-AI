@@ -4,10 +4,10 @@ import { KITCHEN_EQUIPMENT } from '../utils/constants';
 
 const ProfilePage = () => {
   const { profile, updateProfile, user } = useContext(UserContext);
-  
   const [isEditingName, setIsEditingName] = useState(false);
   const [tempName, setTempName] = useState(profile.username || user?.name || '');
 
+  // 1. Safety Check: Ensure user is logged in
   if (!user) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[70vh] px-6 text-center font-poppins">
@@ -18,9 +18,12 @@ const ProfilePage = () => {
     );
   }
 
+  // 2. FIXED: Defensive Input Handler
+  // We use "value || ''" to ensure we never save 'undefined' or 'null' into the global state,
+  // which is a common cause of UI crashes in React.
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    updateProfile({ ...profile, [name]: value });
+    updateProfile({ ...profile, [name]: value || '' });
   };
 
   const saveName = () => {
@@ -37,7 +40,7 @@ const ProfilePage = () => {
     <div className="px-6 py-12 max-w-2xl mx-auto font-poppins">
       <h2 className="text-4xl font-bold text-tangerine mb-2">My Profile</h2>
       <p className="text-forestGreen font-semibold mb-8">Personalize your AI experience.</p>
-      
+
       <div className="bg-white shadow-md rounded-3xl p-8 border border-gray-100 space-y-6">
         
         {/* IDENTITY HEADER */}
@@ -99,6 +102,7 @@ const ProfilePage = () => {
               name="dietaryPreferences"
               placeholder="e.g. Halal, Vegan" 
               className="w-full p-3 rounded-xl border border-gray-200 outline-none focus:ring-2 ring-tangerine bg-gray-50 transition-all" 
+              // We handle both the Onboarding Array and the Profile String here
               value={Array.isArray(profile.dietaryPreferences) ? profile.dietaryPreferences.join(', ') : profile.dietaryPreferences || ''}
               onChange={handleInputChange}
             />
