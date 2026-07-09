@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../contexts/UserContext';
-import { DIETARY_TAGS } from '../../utils/constants';
+import { DIETARY_TAGS, KITCHEN_EQUIPMENT } from '../../utils/constants';
 
 const OnboardingPage = () => {
   const { profile, updateProfile } = useContext(UserContext);
@@ -19,11 +19,12 @@ const OnboardingPage = () => {
   return (
     <div className="min-h-screen bg-white flex items-center justify-center px-6 py-12">
       <div className="max-w-2xl w-full bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 md:p-12">
-        {/* Progress Bar */}
+        
+        {/* Progress Bar - Now based on 5 steps */}
         <div className="w-full bg-gray-100 h-2 rounded-full mb-12 overflow-hidden">
           <div 
             className="bg-tangerine h-full transition-all duration-500" 
-            style={{ width: `${(step / 4) * 100}%` }}
+            style={{ width: `${(step / 5) * 100}%` }}
           ></div>
         </div>
 
@@ -36,12 +37,12 @@ const OnboardingPage = () => {
                 <button 
                   key={tag}
                   onClick={() => {
-                    const current = profile.dietaryPreferences;
+                    const current = profile.dietaryPreferences || [];
                     const next = current.includes(tag) ? current.filter(t => t !== tag) : [...current, tag];
                     updateProfile({...profile, dietaryPreferences: next});
                   }}
                   className={`p-4 rounded-2xl border-2 transition-all text-left font-semibold ${
-                    profile.dietaryPreferences.includes(tag) 
+                    profile.dietaryPreferences?.includes(tag) 
                     ? 'border-tangerine bg-orange-50 text-tangerine' 
                     : 'border-gray-100 text-gray-600 hover:border-forestGreen'
                   }`}
@@ -62,7 +63,7 @@ const OnboardingPage = () => {
                 <label className="block text-forestGreen font-bold mb-2">Allergies (e.g. Peanuts, Shellfish)</label>
                 <input 
                   className="w-full p-4 rounded-xl border border-gray-200 outline-none focus:ring-2 ring-tangerine bg-gray-50"
-                  value={profile.allergies}
+                  value={profile.allergies || ''}
                   onChange={(e) => updateProfile({...profile, allergies: e.target.value})}
                 />
               </div>
@@ -70,7 +71,7 @@ const OnboardingPage = () => {
                 <label className="block text-forestGreen font-bold mb-2">Medical Conditions (e.g. Diabetes, Hypertension)</label>
                 <input 
                   className="w-full p-4 rounded-xl border border-gray-200 outline-none focus:ring-2 ring-tangerine bg-gray-50"
-                  value={profile.medicalConditions}
+                  value={profile.medicalConditions || ''}
                   onChange={(e) => updateProfile({...profile, medicalConditions: e.target.value})}
                 />
               </div>
@@ -87,7 +88,7 @@ const OnboardingPage = () => {
                 <label className="block text-forestGreen font-bold mb-2">Nutrition Goal</label>
                 <select 
                   className="w-full p-4 rounded-xl border border-gray-200 outline-none focus:ring-2 ring-tangerine bg-gray-50"
-                  value={profile.nutritionGoal}
+                  value={profile.nutritionGoal || ''}
                   onChange={(e) => updateProfile({...profile, nutritionGoal: e.target.value})}
                 >
                   <option value="">Select a goal</option>
@@ -118,6 +119,32 @@ const OnboardingPage = () => {
         )}
 
         {step === 4 && (
+          <div className="animate-fadeIn">
+            <h2 className="text-3xl font-bold text-tangerine mb-4">Your Kitchen Setup</h2>
+            <p className="text-forestGreen mb-8 font-medium">What tools do you have? We'll only suggest recipes you can actually cook.</p>
+            <div className="grid grid-cols-2 gap-4 mb-8">
+              {KITCHEN_EQUIPMENT.map(item => (
+                <button 
+                  key={item}
+                  onClick={() => {
+                    const current = profile.equipment || [];
+                    const next = current.includes(item) ? current.filter(i => i !== item) : [...current, item];
+                    updateProfile({...profile, equipment: next});
+                  }}
+                  className={`p-4 rounded-2xl border-2 transition-all text-left font-semibold ${
+                    profile.equipment?.includes(item) 
+                    ? 'border-tangerine bg-orange-50 text-tangerine' 
+                    : 'border-gray-100 text-gray-600 hover:border-forestGreen'
+                  }`}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {step === 5 && (
           <div className="animate-fadeIn text-center">
             <div className="text-6xl mb-6">🍳</div>
             <h2 className="text-3xl font-bold text-tangerine mb-4">You're All Set!</h2>
@@ -131,7 +158,7 @@ const OnboardingPage = () => {
           </div>
         )}
 
-        {step < 4 && (
+        {step < 5 && (
           <div className="flex justify-between mt-12">
             <button onClick={handleBack} disabled={step === 1} className={`font-bold ${step === 1 ? 'invisible' : 'text-gray-400 hover:text-forestGreen'}`}>
               Back
@@ -145,4 +172,5 @@ const OnboardingPage = () => {
     </div>
   );
 };
+
 export default OnboardingPage;
