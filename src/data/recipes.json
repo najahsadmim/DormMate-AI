@@ -3,6 +3,7 @@
     "id": 1,
     "title": "Chicken Khichuri",
     "description": "A comforting one-pot meal perfect for cold nights and exam seasons. Nutritious and filling.",
+    "category": "Lunch",
     "estimatedCost": 120,
     "calories": 420,
     "protein": 28,
@@ -25,12 +26,14 @@
       "Add 3 cups of water and simmer until water is absorbed and rice is soft."
     ],
     "tags": ["Halal", "High-Protein", "Comfort Food"],
+    "equipment": ["Cooking Pot", "Induction Cooktop"],
     "healthyChoice": true
   },
   {
     "id": 2,
     "title": "Egg Fried Rice",
     "description": "The ultimate dorm staple. Quick, cheap, and uses only one pan.",
+    "category": "Dinner",
     "estimatedCost": 80,
     "calories": 350,
     "protein": 15,
@@ -51,12 +54,14 @@
       "Stir-fry on high heat for 3-5 minutes."
     ],
     "tags": ["Vegetarian", "Low-Budget", "Quick"],
+    "equipment": ["Frying Pan", "Induction Cooktop"],
     "healthyChoice": false
   },
   {
     "id": 3,
     "title": "Veggie Noodles",
     "description": "A light and spicy noodle dish packed with seasonal vegetables.",
+    "category": "Lunch",
     "estimatedCost": 60,
     "calories": 300,
     "protein": 10,
@@ -77,12 +82,14 @@
       "Mix well and serve hot."
     ],
     "tags": ["Vegan", "Low-Budget", "Quick"],
+    "equipment": ["Cooking Pot", "Frying Pan", "Induction Cooktop"],
     "healthyChoice": true
   },
   {
     "id": 4,
     "title": "One-Pot Pasta",
     "description": "No straining required. Pasta and sauce cook together for maximum flavor.",
+    "category": "Dinner",
     "estimatedCost": 150,
     "calories": 500,
     "protein": 20,
@@ -103,12 +110,14 @@
       "Top with cheese and oregano."
     ],
     "tags": ["Vegetarian", "Comfort Food"],
+    "equipment": ["Cooking Pot", "Induction Cooktop"],
     "healthyChoice": false
   },
   {
     "id": 5,
     "title": "Peanut Butter Banana Toast",
     "description": "The perfect energy-boosting breakfast for early morning lectures.",
+    "category": "Breakfast",
     "estimatedCost": 40,
     "calories": 280,
     "protein": 12,
@@ -128,12 +137,14 @@
       "Drizzle honey if desired."
     ],
     "tags": ["Vegan", "High-Protein", "Quick"],
+    "equipment": ["Toaster"],
     "healthyChoice": true
   },
   {
     "id": 6,
     "title": "Oatmeal with Berries",
     "description": "Heart-healthy breakfast that keeps you full until lunch.",
+    "category": "Breakfast",
     "estimatedCost": 70,
     "calories": 310,
     "protein": 14,
@@ -153,12 +164,14 @@
       "Drizzle honey on top."
     ],
     "tags": ["Vegetarian", "High-Protein"],
+    "equipment": ["Cooking Pot", "Induction Cooktop"],
     "healthyChoice": true
   },
   {
     "id": 7,
     "title": "Masala Omelette",
     "description": "A spicy, protein-packed start to your day.",
+    "category": "Breakfast",
     "estimatedCost": 50,
     "calories": 210,
     "protein": 18,
@@ -179,12 +192,14 @@
       "Fold and serve with toast."
     ],
     "tags": ["Halal", "High-Protein", "Low-Budget"],
+    "equipment": ["Frying Pan", "Induction Cooktop"],
     "healthyChoice": true
   },
   {
     "id": 8,
     "title": "Chickpea Salad",
     "description": "Fresh, crunchy, and incredibly cheap. Great for lunch between classes.",
+    "category": "Lunch",
     "estimatedCost": 60,
     "calories": 320,
     "protein": 15,
@@ -205,12 +220,14 @@
       "Toss and serve chilled."
     ],
     "tags": ["Vegan", "Low-Budget", "Healthy"],
+    "equipment": ["Refrigerator"],
     "healthyChoice": true
   },
   {
     "id": 9,
     "title": "Tuna Sandwich",
     "description": "Quick protein hit. No cooking required!",
+    "category": "Lunch",
     "estimatedCost": 110,
     "calories": 380,
     "protein": 25,
@@ -230,12 +247,14 @@
       "Cover with second slice of bread."
     ],
     "tags": ["Halal", "High-Protein", "Quick"],
+    "equipment": ["Refrigerator"],
     "healthyChoice": false
   },
   {
     "id": 10,
     "title": "Vegetable Stir-Fry",
     "description": "Clean out your fridge with this versatile stir-fry.",
+    "category": "Dinner",
     "estimatedCost": 90,
     "calories": 250,
     "protein": 8,
@@ -255,12 +274,14 @@
       "Serve as is or with rice."
     ],
     "tags": ["Vegan", "Low-Budget"],
+    "equipment": ["Frying Pan", "Induction Cooktop"],
     "healthyChoice": true
   },
   {
     "id": 11,
     "title": "Paneer Bhurji",
     "description": "Scrambled cottage cheese with spices. A protein-rich vegetarian delight.",
+    "category": "Dinner",
     "estimatedCost": 140,
     "calories": 380,
     "protein": 22,
@@ -281,12 +302,14 @@
       "Cook for 5 minutes and garnish with coriander."
     ],
     "tags": ["Vegetarian", "High-Protein"],
+    "equipment": ["Frying Pan", "Induction Cooktop"],
     "healthyChoice": true
   },
   {
     "id": 12,
     "title": "Greek Yogurt Parfait",
     "description": "Refreshing and high in probiotics. Perfect for a quick snack.",
+    "category": "Breakfast",
     "estimatedCost": 80,
     "calories": 220,
     "protein": 15,
@@ -306,12 +329,14 @@
       "Drizzle with honey."
     ],
     "tags": ["Vegetarian", "High-Protein", "Quick"],
+    "equipment": ["Refrigerator"],
     "healthyChoice": true
   },
   {
     "id": 13,
     "title": "Mushroom Toast",
     "description": "Sophisticated but simple. Great for a weekend brunch.",
+    "category": "Breakfast",
     "estimatedCost": 100,
     "calories": 310,
     "protein": 12,
@@ -331,12 +356,14 @@
       "Place mushrooms on toast and season."
     ],
     "tags": ["Vegetarian", "Low-Budget"],
+    "equipment": ["Frying Pan", "Induction Cooktop", "Toaster"],
     "healthyChoice": true
   },
   {
     "id": 14,
     "title": "Lentil Soup (Dal)",
     "description": "Pure nutrition. One of the most affordable and healthy meals globally.",
+    "category": "Lunch",
     "estimatedCost": 50,
     "calories": 280,
     "protein": 18,
@@ -357,12 +384,14 @@
       "Stir and simmer for 5 minutes."
     ],
     "tags": ["Vegan", "Halal", "Low-Budget", "Healthy"],
+    "equipment": ["Cooking Pot", "Induction Cooktop"],
     "healthyChoice": true
   },
   {
     "id": 15,
     "title": "Quick Quesadilla",
     "description": "Cheesy and satisfying. Perfect for a midnight snack.",
+    "category": "Dinner",
     "estimatedCost": 110,
     "calories": 450,
     "protein": 18,
@@ -382,6 +411,40 @@
       "Cover with second tortilla and flip when golden brown."
     ],
     "tags": ["Vegetarian", "Quick", "Comfort Food"],
+    "equipment": ["Frying Pan", "Induction Cooktop"],
+    "healthyChoice": false
+  },
+  {
+    "id": 16,
+    "title": "Mini Pancakes",
+    "description": "Fluffy, bite-sized pancakes. Perfect for a sweet breakfast treat.",
+    "category": "Breakfast",
+    "estimatedCost": 100,
+    "calories": 450,
+    "protein": 12,
+    "cookingTime": 30,
+    "difficulty": "Easy",
+    "image": "https://www.courtneyssweets.com/wp-content/uploads/2022/12/mini-pancakes.jpg",
+    "ingredients": [
+      "2 cups Flour",
+      "2 tsp Baking Powder",
+      "2 Eggs",
+      "1/2 tsp Salt",
+      "2 tsp Vanilla Essence",
+      "1 cup Milk",
+      "7 tbsp Sugar"
+    ],
+    "steps": [
+      "Whisk flour, baking powder, salt, and sugar in a bowl.",
+      "In another bowl, beat eggs, milk, and vanilla essence.",
+      "Gradually pour the wet ingredients into the dry mixture and stir until smooth.",
+      "Heat a lightly oiled frying pan over medium heat.",
+      "Pour small amounts of batter to make mini pancakes.",
+      "Flip when bubbles appear on the surface and cook until golden brown."
+    ],
+    "tags": ["Vegetarian", "Breakfast", "Sweet"],
+    "equipment": ["Frying Pan", "Induction Cooktop"],
     "healthyChoice": false
   }
 ]
+
