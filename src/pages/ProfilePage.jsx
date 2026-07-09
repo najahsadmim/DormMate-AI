@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { UserContext } from '../contexts/UserContext';
+import { KITCHEN_EQUIPMENT } from '../utils/constants';
 
 const ProfilePage = () => {
   const { profile, updateProfile, user } = useContext(UserContext);
   
-  // Local state to toggle "Edit Mode" for the display name
   const [isEditingName, setIsEditingName] = useState(false);
-  const [tempName, setTempName] = useState(profile.username || user.name || '');
+  const [tempName, setTempName] = useState(profile.username || user?.name || '');
 
   if (!user) {
     return (
@@ -18,19 +18,16 @@ const ProfilePage = () => {
     );
   }
 
-  // Handle updating other fields
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     updateProfile({ ...profile, [name]: value });
   };
 
-  // Save the new name and exit edit mode
   const saveName = () => {
     updateProfile({ ...profile, username: tempName });
     setIsEditingName(false);
   };
 
-  // Cancel editing and revert to original name
   const cancelEdit = () => {
     setTempName(profile.username || user.name || '');
     setIsEditingName(false);
@@ -39,11 +36,11 @@ const ProfilePage = () => {
   return (
     <div className="px-6 py-12 max-w-2xl mx-auto font-poppins">
       <h2 className="text-4xl font-bold text-tangerine mb-2">My Profile</h2>
-      <p className="text-forestGreen font-semibold mb-8">Personalize your experience.</p>
+      <p className="text-forestGreen font-semibold mb-8">Personalize your AI experience.</p>
       
       <div className="bg-white shadow-md rounded-3xl p-8 border border-gray-100 space-y-6">
         
-        {/* --- DYNAMIC USER IDENTITY HEADER --- */}
+        {/* IDENTITY HEADER */}
         <div className="flex flex-col items-center text-center mb-10 pb-8 border-b border-gray-100">
           <div className="relative group mb-4">
             <div className="w-24 h-24 bg-tangerine rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-xl border-4 border-white ring-4 ring-tangerine/20">
@@ -88,9 +85,8 @@ const ProfilePage = () => {
           </div>
           <p className="text-gray-400 text-sm mt-2">Your unique identity across DormMate AI</p>
         </div>
-        {/* --- END IDENTITY HEADER --- */}
 
-        {/* Preferences Section */}
+        {/* DIETARY & HEALTH SECTION */}
         <div className="space-y-6">
           <h4 className="text-sm uppercase tracking-widest font-bold text-gray-400 border-l-4 border-tangerine pl-3 mb-4">
             Dietary & Health
@@ -133,7 +129,33 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* Budget Section */}
+        {/* KITCHEN TOOLS SECTION */}
+        <div className="pt-6">
+          <h4 className="text-sm uppercase tracking-widest font-bold text-gray-400 border-l-4 border-tangerine pl-3 mb-4">
+            Kitchen Tools
+          </h4>
+          <div className="flex flex-wrap gap-3">
+            {KITCHEN_EQUIPMENT.map(item => (
+              <button 
+                key={item}
+                onClick={() => {
+                  const current = profile.equipment || [];
+                  const next = current.includes(item) ? current.filter(i => i !== item) : [...current, item];
+                  updateProfile({...profile, equipment: next});
+                }}
+                className={`px-4 py-2 rounded-full border-2 text-xs font-bold transition-all ${
+                  profile.equipment?.includes(item) 
+                  ? 'border-tangerine bg-orange-50 text-tangerine' 
+                  : 'border-gray-100 text-gray-400 bg-gray-50 hover:border-forestGreen'
+                }`}
+              >
+                {item}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* FINANCIALS SECTION */}
         <div className="pt-6">
           <h4 className="text-sm uppercase tracking-widest font-bold text-gray-400 border-l-4 border-tangerine pl-3 mb-4">
             Financials
@@ -154,7 +176,7 @@ const ProfilePage = () => {
         <div className="pt-6">
           <div className="bg-orange-50 p-4 rounded-2xl border border-orange-100 text-center">
             <p className="text-xs text-tangerine font-bold italic">
-              ✨ Your preferences are synced in real-time.
+              ✨ Your preferences are synced in real-time with the AI assistant.
             </p>
           </div>
         </div>
