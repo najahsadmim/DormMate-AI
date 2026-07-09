@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { UI_TEXT } from '../utils/constants'; 
 
 const RecipeCard = ({ recipe }) => {
   // Fallback for images if the URL fails
@@ -19,7 +20,7 @@ const RecipeCard = ({ recipe }) => {
         />
         {recipe.healthyChoice && (
           <span className="absolute top-3 right-3 bg-white/90 text-forestGreen px-2 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider shadow-sm">
-            Healthy Choice
+            {UI_TEXT.HEALTHY_CHOICE}
           </span>
         )}
       </div>
@@ -41,7 +42,6 @@ const RecipeCard = ({ recipe }) => {
           <p>⏱️ <span className="font-semibold text-forestGreen">{recipe.cookingTime} min</span></p>
         </div>
         
-        {/* Action Button that appears on hover */}
         <div className="text-center">
             <span className="text-tangerine font-bold text-xs group-hover:underline transition">
                 View Recipe →

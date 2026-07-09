@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import RecipeCard from '../components/RecipeCard';
-import recipes from '../data/recipes.json'; // Import the "Source of Truth"
+import recipes from '../data/recipes.json'; 
+import { BUDGET_LIMITS } from '../utils/constants'; 
 
 const HomePage = () => {
   const [budget, setBudget] = useState(250);
@@ -38,37 +40,39 @@ const HomePage = () => {
           </div>
           <input 
             type="range" 
-            min="50" 
-            max="500" 
+            min={BUDGET_LIMITS.MIN} 
+            max={BUDGET_LIMITS.MAX} 
             value={budget} 
             onChange={(e) => setBudget(e.target.value)} 
             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-tangerine"
           />
           <div className="flex justify-between text-xs text-gray-400 mt-2">
-            <span>Tk 50</span>
-            <span>Tk 500</span>
+            <span>Tk {BUDGET_LIMITS.MIN}</span>
+            <span>Tk {BUDGET_LIMITS.MAX}</span>
           </div>
         </div>
       </section>
 
-      {/* Recipe of the Week (Now Dynamic) */}
+      {/* Recipe of the Week (Now Dynamic & Clickable) */}
       <section className="px-6 py-8 max-w-6xl mx-auto">
         <h3 className="text-2xl font-bold text-forestGreen mb-6">Recipe of the Week</h3>
-        <div className="relative h-64 md:h-80 w-full rounded-3xl overflow-hidden group cursor-pointer shadow-xl">
-          <img 
-            src={featuredRecipe.image} 
-            className="w-full h-full object-cover group-hover:scale-105 transition duration-500" 
-            alt="Featured" 
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-8 text-white">
-            <h4 className="text-3xl font-bold mb-2">{featuredRecipe.title}</h4>
-            <p className="text-sm opacity-90 mb-4">{featuredRecipe.description}</p>
-            <div className="flex gap-3">
-              <span className="bg-tangerine px-3 py-1 rounded-full text-xs font-bold">Tk {featuredRecipe.estimatedCost}</span>
-              <span className="bg-forestGreen px-3 py-1 rounded-full text-xs font-bold">{featuredRecipe.calories} kcal</span>
+        <Link to={`/recipe/${featuredRecipe.id}`} className="block">
+          <div className="relative h-64 md:h-80 w-full rounded-3xl overflow-hidden group cursor-pointer shadow-xl">
+            <img 
+              src={featuredRecipe.image} 
+              className="w-full h-full object-cover group-hover:scale-105 transition duration-500" 
+              alt="Featured" 
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-8 text-white">
+              <h4 className="text-3xl font-bold mb-2">{featuredRecipe.title}</h4>
+              <p className="text-sm opacity-90 mb-4">{featuredRecipe.description}</p>
+              <div className="flex gap-3">
+                <span className="bg-tangerine px-3 py-1 rounded-full text-xs font-bold">Tk {featuredRecipe.estimatedCost}</span>
+                <span className="bg-forestGreen px-3 py-1 rounded-full text-xs font-bold">{featuredRecipe.calories} kcal</span>
+              </div>
             </div>
           </div>
-        </div>
+        </Link>
       </section>
 
       {/* Dynamic Categories */}
@@ -78,7 +82,6 @@ const HomePage = () => {
           <button className="text-tangerine font-bold text-sm hover:underline">View All</button>
         </div>
         
-        {/* This now maps through the imported JSON file instead of hardcoded data */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {recipes.map((recipe) => (
             <RecipeCard key={recipe.id} recipe={recipe} />

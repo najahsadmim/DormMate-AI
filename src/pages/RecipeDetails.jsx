@@ -1,19 +1,20 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import recipes from '../data/recipes.json';
+import { UI_TEXT } from '../utils/constants';
 
 const RecipeDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Find the specific recipe that matches the ID from the URL
+  // Find the specific recipe from JSON
   const recipe = recipes.find((r) => r.id === parseInt(id));
 
-  // Handle case where recipe is not found (404)
+  // Handle 404 state
   if (!recipe) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[70vh] px-6 text-center font-poppins">
-        <h2 className="text-4xl font-bold text-tangerine mb-4">Recipe Not Found</h2>
+        <h2 className="text-4xl font-bold text-tangerine mb-4">{UI_TEXT.RECIPE_NOT_FOUND}</h2>
         <p className="text-forestGreen mb-8">Sorry, we couldn't find the meal you're looking for.</p>
         <button 
           onClick={() => navigate('/')} 
@@ -32,48 +33,38 @@ const RecipeDetails = () => {
         onClick={() => navigate(-1)} 
         className="text-forestGreen font-bold mb-6 flex items-center gap-2 hover:text-tangerine transition"
       >
-        ← Back to Recipes
+        {UI_TEXT.BACK_BUTTON}
       </button>
 
       <div className="bg-white rounded-3xl overflow-hidden shadow-xl border border-gray-100">
-        {/* Recipe Image */}
+        {/* Header Image */}
         <div className="h-96 w-full relative">
           <img 
             src={recipe.image} 
             alt={recipe.title} 
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover" 
           />
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-8">
-            <h2 className="text-4xl font-bold text-white mb-2">{recipe.title}</h2>
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-8 text-white">
+            <h2 className="text-4xl font-bold mb-2">{recipe.title}</h2>
             <p className="text-gray-200 italic">{recipe.description}</p>
           </div>
         </div>
         
         <div className="p-8">
-          {/* Quick Info Bar */}
+          {/* Tags Bar */}
           <div className="flex flex-wrap gap-3 mb-10">
-            <span className="bg-green-100 text-forestGreen px-4 py-1 rounded-full text-sm font-bold">
-              {recipe.difficulty}
-            </span>
-            <span className="bg-orange-100 text-tangerine px-4 py-1 rounded-full text-sm font-bold">
-              Tk {recipe.estimatedCost}
-            </span>
-            <span className="bg-blue-100 text-blue-600 px-4 py-1 rounded-full text-sm font-bold">
-              {recipe.cookingTime} Mins
-            </span>
+            <span className="bg-green-100 text-forestGreen px-4 py-1 rounded-full text-sm font-bold">{recipe.difficulty}</span>
+            <span className="bg-orange-100 text-tangerine px-4 py-1 rounded-full text-sm font-bold">Tk {recipe.estimatedCost}</span>
+            <span className="bg-blue-100 text-blue-600 px-4 py-1 rounded-full text-sm font-bold">{recipe.cookingTime} Mins</span>
             {recipe.tags.map(tag => (
-              <span key={tag} className="bg-gray-100 text-gray-600 px-4 py-1 rounded-full text-sm font-medium">
-                {tag}
-              </span>
+              <span key={tag} className="bg-gray-100 text-gray-600 px-4 py-1 rounded-full text-sm font-medium">{tag}</span>
             ))}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {/* Ingredients Section */}
+            {/* Ingredients */}
             <div>
-              <h3 className="text-2xl font-bold text-forestGreen mb-6 flex items-center gap-2">
-                🛒 Ingredients
-              </h3>
+              <h3 className="text-2xl font-bold text-forestGreen mb-6 flex items-center gap-2">🛒 Ingredients</h3>
               <ul className="space-y-3">
                 {recipe.ingredients.map((ingredient, index) => (
                   <li key={index} className="flex items-start gap-3 text-gray-600">
@@ -84,11 +75,9 @@ const RecipeDetails = () => {
               </ul>
             </div>
 
-            {/* Cooking Steps Section */}
+            {/* Steps */}
             <div>
-              <h3 className="text-2xl font-bold text-forestGreen mb-6 flex items-center gap-2">
-                🍳 Cooking Steps
-              </h3>
+              <h3 className="text-2xl font-bold text-forestGreen mb-6 flex items-center gap-2">🍳 Cooking Steps</h3>
               <div className="space-y-6">
                 {recipe.steps.map((step, index) => (
                   <div key={index} className="flex gap-4">
@@ -113,7 +102,7 @@ const RecipeDetails = () => {
               <p className="text-xl font-bold text-forestGreen">{recipe.protein}g</p>
             </div>
             <div>
-              <p className="text-gray-400 text-xs uppercase font-bold">Budget</p>
+              <p className="text-gray-400 text-xs uppercase font-bold">Cost</p>
               <p className="text-xl font-bold text-forestGreen">Low</p>
             </div>
           </div>
