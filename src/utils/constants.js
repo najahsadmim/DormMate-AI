@@ -26,3 +26,14 @@ export const UI_TEXT = {
     RECIPE_NOT_FOUND: "Recipe Not Found",
     BACK_BUTTON: "← Back to Recipes",
 };
+
+export const KITCHEN_EQUIPMENT = [
+    'Microwave', 
+    'Air Fryer', 
+    'Induction Cooktop', 
+    'Electric Kettle', 
+    'Frying Pan', 
+    'Cooking Pot', 
+    'Refrigerator', 
+    'Toaster'
+];
