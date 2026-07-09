@@ -3,10 +3,13 @@ import { Link } from 'react-router-dom';
 import RecipeCard from '../components/RecipeCard';
 import recipes from '../data/recipes.json';
 import { BUDGET_LIMITS } from '../utils/constants';
+import RecipeService from '../services/RecipeService';
 
 const HomePage = () => {
   const [budget, setBudget] = useState(250);
-  const featuredRecipe = recipes[0];
+  const recipes = RecipeService.getAllRecipes();
+  const featuredRecipe = RecipeService.getFeaturedRecipe();
+
 
   return (
     <div className="bg-white min-h-screen font-poppins pb-20">
