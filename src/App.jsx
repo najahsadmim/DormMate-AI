@@ -1,14 +1,18 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { UserProvider } from './contexts/UserContext'; // Import Provider
+import { UserProvider } from './contexts/UserContext';
 
+// Components
 import Navbar from './components/Navbar';
+
+// Pages
 import HomePage from './pages/HomePage';
 import SearchPage from './pages/SearchPage';
 import PantryPage from './pages/PantryPage';
 import SavedPage from './pages/SavedPage';
 import ProfilePage from './pages/ProfilePage';
 import RecipeDetails from './pages/RecipeDetails';
+import MealPlanPage from './pages/MealPlanPage'; // <--- Ensure this import is here
 
 // Auth Pages
 import LoginPage from './pages/auth/LoginPage';
@@ -17,7 +21,7 @@ import OnboardingPage from './pages/auth/OnboardingPage';
 
 function App() {
   return (
-    <UserProvider> {/* Wrap the entire app in the User Context */}
+    <UserProvider>
       <Router>
         <div className="min-h-screen bg-white">
           <Navbar />
@@ -29,7 +33,9 @@ function App() {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/recipe/:id" element={<RecipeDetails />} />
             
-            {/* Auth Routes */}
+            {/* THE MEAL PLAN ROUTE */}
+            <Route path="/meal-plan" element={<MealPlanPage />} />
+
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/onboarding" element={<OnboardingPage />} />
@@ -39,4 +45,5 @@ function App() {
     </UserProvider>
   );
 }
+
 export default App;
