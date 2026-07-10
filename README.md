@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="dormmate.png" width="180"/>
+  <img src="dormmate.png" width="450"/>
 </p>
 
 # 🥗 DormMate AI
