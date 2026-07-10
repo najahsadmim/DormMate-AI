@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="dormmate.png" width="180"/>
+</p>
+
 # 🥗 DormMate AI
 
 > **Cook Smarter. Eat Better. Waste Less.**
