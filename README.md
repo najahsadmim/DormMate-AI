@@ -56,6 +56,32 @@ to recommend meals that are affordable, healthy, and realistic to prepare.
 
 ---
 
+## Live User Experience
+
+> Navigate through our AI-powered Home page offering smart search, budget filtering, and personalized recipe recommendations. 
+
+<p align="center">
+  <img src="assets/home.png" width="850"/>
+</p>
+
+---
+
+> Scan your pantry to instantaneously find the perfect, low-effort recipe for the day!
+
+<p align="center">
+  <img src="assets/scan.png" width="850"/>
+</p>
+
+---
+
+> Yes! The perfect, low-effort AND low-budget recipe DOES exist. Health-conscious or not, we've got it all. 
+
+<p align="center">
+  <img src="assets/khichuri.png" width="850"/>
+</p>
+
+---
+
 ## Sustainable Development Goals
 
 DormMate AI contributes to three United Nations Sustainable Development Goals by making healthy cooking more accessible and sustainable.
