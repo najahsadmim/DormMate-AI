@@ -1,8 +1,8 @@
 import recipes from '../data/recipes.json';
 
-// 1. Define the Base URL as a constant. 
-// If you ever change hosting, you only have to change this one line.
-const API_BASE_URL = 'https://dormmate-ai-backend.onrender.com';
+// ✅ FIX: Added 'export' here. 
+// Without this, any page importing API_BASE_URL will crash the entire website.
+export const API_BASE_URL = 'https://dormmate-ai-backend.onrender.com';
 
 /**
  * IMAGE ENGINE: Generates a professional AI image URL.
@@ -90,10 +90,8 @@ const RecipeService = {
 
   // --- AI ENDPOINTS ---
 
-  // 1. AI Recommendations (Search)
   getAIRecommendations: async (query, userProfile) => {
     try {
-      // FIX: Added the '/recommend' endpoint to the URL
       const response = await fetch(`${API_BASE_URL}/recommend`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -134,7 +132,6 @@ const RecipeService = {
     }
   },
 
-  // 2. AI Meal Planner (Added back for Phase 7)
   getAIPlan: async (profile) => {
     try {
       const response = await fetch(`${API_BASE_URL}/plan-week`, {
@@ -151,7 +148,6 @@ const RecipeService = {
     }
   },
 
-  // 3. AI Substitutions (Added back for Phase 7)
   getAISubstitute: async (ingredient, recipeTitle, profile) => {
     try {
       const response = await fetch(`${API_BASE_URL}/substitute`, {
