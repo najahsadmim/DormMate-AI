@@ -9,7 +9,7 @@ const MealPlanPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   // REPLACE THIS URL with your actual Render URL (e.g., https://dormmate-backend.onrender.com)
-  const API_BASE_URL = 'https://your-backend-name.onrender.com'; 
+  const API_BASE_URL = 'https://dormmate-ai-backend.onrender.com/'; 
 
   const generatePlan = async () => {
     setIsLoading(true);
