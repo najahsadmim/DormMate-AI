@@ -1,5 +1,9 @@
 import recipes from '../data/recipes.json';
 
+// 1. Define the Base URL as a constant. 
+// If you ever change hosting, you only have to change this one line.
+const API_BASE_URL = 'https://dormmate-ai-backend.onrender.com';
+
 /**
  * IMAGE ENGINE: Generates a professional AI image URL.
  */
@@ -25,7 +29,7 @@ const RecipeService = {
     const staticRecipe = recipes.find(r => r && String(r.id) === stringId);
     if (staticRecipe) return staticRecipe;
 
-    // 2. Search AI-Generated Cache
+    // 2. Search AI-Generated Cache (from localStorage)
     try {
       const aiCache = JSON.parse(localStorage.getItem('ai_generated_recipes') || '[]');
       if (Array.isArray(aiCache)) {
@@ -48,26 +52,22 @@ const RecipeService = {
     const f = filters || {};
     const p = userProfile || {};
 
-    // Safety check: Ensure recipes is an array
     if (!Array.isArray(recipes)) return [];
 
     return recipes.filter(recipe => {
       if (!recipe) return false;
 
-      // UI-based filters
       if (f.maxBudget && recipe.estimatedCost > f.maxBudget) return false;
       if (f.maxCalories && recipe.calories > f.maxCalories) return false;
       if (f.minProtein && recipe.protein < f.minProtein) return false;
       if (f.maxTime && recipe.cookingTime > f.maxTime) return false;
 
-      // Profile-based: Dietary Preferences (Defensive check for .tags)
       const tags = recipe.tags || [];
       if (p.dietaryPreferences && Array.isArray(p.dietaryPreferences) && p.dietaryPreferences.length > 0) {
         const hasRequiredTag = p.dietaryPreferences.every(pref => tags.includes(pref));
         if (!hasRequiredTag) return false;
       }
 
-      // Profile-based: Allergies (Defensive check for .ingredients)
       const ingredients = recipe.ingredients || [];
       if (p.allergies) {
         const allergiesList = p.allergies.toLowerCase().split(',').map(a => a.trim());
@@ -77,7 +77,6 @@ const RecipeService = {
         if (containsAllergy) return false;
       }
 
-      // Profile-based: Equipment (Defensive check for .equipment)
       const recipeEquip = recipe.equipment || [];
       const userEquip = p.equipment || [];
       if (userEquip.length > 0) {
@@ -89,9 +88,13 @@ const RecipeService = {
     });
   },
 
+  // --- AI ENDPOINTS ---
+
+  // 1. AI Recommendations (Search)
   getAIRecommendations: async (query, userProfile) => {
     try {
-      const response = await fetch('https://dormmate-ai-backend.onrender.com', {
+      // FIX: Added the '/recommend' endpoint to the URL
+      const response = await fetch(`${API_BASE_URL}/recommend`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query, profile: userProfile }),
@@ -128,6 +131,39 @@ const RecipeService = {
     } catch (error) {
       console.error("AI Service Error:", error);
       return []; 
+    }
+  },
+
+  // 2. AI Meal Planner (Added back for Phase 7)
+  getAIPlan: async (profile) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/plan-week`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ profile, duration_days: 7 }),
+      });
+      if (!response.ok) throw new Error('Planner Server Error');
+      const data = await response.json();
+      return data.plan || [];
+    } catch (error) {
+      console.error("Planning Error:", error);
+      return [];
+    }
+  },
+
+  // 3. AI Substitutions (Added back for Phase 7)
+  getAISubstitute: async (ingredient, recipeTitle, profile) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/substitute`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ingredient, recipe_title: recipeTitle, profile }),
+      });
+      if (!response.ok) throw new Error('Substitution Server Error');
+      return await response.json();
+    } catch (error) {
+      console.error("Substitution Error:", error);
+      return null;
     }
   }
 };
