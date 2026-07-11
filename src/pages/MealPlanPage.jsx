@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
+import { API_BASE_URL } from '../services/RecipeService'; 
 
 const MealPlanPage = () => {
   const { profile, user } = useContext(UserContext);
@@ -10,36 +11,56 @@ const MealPlanPage = () => {
 
   const generatePlan = async () => {
     setIsLoading(true);
+    
+    // 1. Define the final URL clearly
+    const finalUrl = `${API_BASE_URL}/plan-week`;
+    console.log("Requesting meal plan from:", finalUrl);
+
     try {
-      const response = await fetch('https://dormmate-ai-backend.onrender.com/', {
+      // 2. Ensure the payload matches the Python "PlanRequest" model exactly
+      const payload = {
+        profile: profile || {}, 
+        duration_days: 7
+      };
+
+      const response = await fetch(finalUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          profile: profile,
-          duration_days: 7 
-        }),
+        body: JSON.stringify(payload),
       });
+
+      // 3. Debugging: Log the status code if it fails
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Server Error (${response.status}):`, errorText);
+        throw new Error(`Server responded with ${response.status}`);
+      }
       
-      if (!response.ok) throw new Error("AI Server Error");
       const data = await response.json();
-      setPlan(data.plan);
+      console.log("AI Response received:", data);
+
+      // 4. Handle different JSON structures (Some AIs wrap results in 'plan', some don't)
+      if (data && data.plan) {
+        setPlan(data.plan);
+      } else if (Array.isArray(data)) {
+        setPlan(data);
+      } else {
+        throw new Error("AI returned data, but it wasn't in the expected list format.");
+      }
+
     } catch (e) {
-      console.error("Planning error:", e);
-      alert("Failed to generate plan. Make sure the backend is running!");
+      console.error("Detailed Planning Error:", e);
+      // We give the user a more helpful alert
+      alert(`Error: ${e.message}. Check the browser console for details!`);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // SMART ROUTING LOGIC
   const handleMealClick = (meal) => {
     if (meal.id) {
-      // If the AI gave us a database ID, go straight to the recipe
       navigate(`/recipe/${meal.id}`);
     } else {
-      // If it's a generated meal, we send them to search 
-      // and tell the search page to trigger an AI search for this meal name
-      // We do this by passing the meal name as a query parameter
       navigate(`/search?q=${encodeURIComponent(meal.meal)}&ai=true`);
     }
   };
@@ -48,7 +69,7 @@ const MealPlanPage = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-[70vh] text-center font-poppins px-6">
         <h2 className="text-3xl font-bold text-tangerine mb-4">Please Sign In</h2>
-        <a href="/login" className="bg-forestGreen text-white px-8 py-3 rounded-full font-bold">Login Now</a>
+        <a href="/login" className="bg-forestGreen text-white px-8 py-3 rounded-full font-bold hover:bg-green-700 transition">Login Now</a>
       </div>
     );
   }
@@ -66,7 +87,15 @@ const MealPlanPage = () => {
           disabled={isLoading}
           className="bg-forestGreen text-white px-10 py-4 rounded-full font-bold hover:bg-green-700 transition shadow-lg disabled:opacity-50 flex items-center gap-2 mx-auto"
         >
-          {isLoading ? "🌀 Thinking..." : "✨ Generate My Week"}
+          {isLoading ? (
+            <>
+              <span className="animate-spin">🌀</span> Thinking...
+            </>
+          ) : (
+            <>
+              <span>✨</span> Generate My Week
+            </>
+          )}
         </button>
       </div>
 
@@ -78,7 +107,9 @@ const MealPlanPage = () => {
               onClick={() => handleMealClick(day)}
               className="bg-white border border-gray-100 p-5 rounded-3xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer border-t-4 border-t-tangerine group"
             >
-              <h4 className="text-tangerine font-bold text-lg mb-3 group-hover:scale-105 transition-transform">{day.day}</h4>
+              <h4 className="text-tangerine font-bold text-lg mb-3 group-hover:scale-105 transition-transform">
+                {day.day}
+              </h4>
               <div className="space-y-3">
                 <div>
                   <p className="text-forestGreen font-bold text-sm leading-tight group-hover:text-tangerine transition-colors">
