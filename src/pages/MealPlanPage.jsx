@@ -8,41 +8,38 @@ const MealPlanPage = () => {
   const [plan, setPlan] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // REPLACE THIS URL with your actual Render URL (e.g., https://dormmate-backend.onrender.com)
-  const API_BASE_URL = 'https://dormmate-ai-backend.onrender.com/'; 
-
   const generatePlan = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/plan-week`, {
+      const response = await fetch('https://dormmate-ai-backend.onrender.com/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          profile: profile || {},
+          profile: profile,
           duration_days: 7 
         }),
       });
       
-      if (!response.ok) throw new Error("Server Error");
-      
+      if (!response.ok) throw new Error("AI Server Error");
       const data = await response.json();
-      if (data && data.plan) {
-        setPlan(data.plan);
-      } else {
-        throw new Error("Invalid response");
-      }
+      setPlan(data.plan);
     } catch (e) {
       console.error("Planning error:", e);
-      alert("Failed to generate plan. Check if the backend is awake!");
+      alert("Failed to generate plan. Make sure the backend is running!");
     } finally {
       setIsLoading(false);
     }
   };
 
+  // SMART ROUTING LOGIC
   const handleMealClick = (meal) => {
     if (meal.id) {
+      // If the AI gave us a database ID, go straight to the recipe
       navigate(`/recipe/${meal.id}`);
     } else {
+      // If it's a generated meal, we send them to search 
+      // and tell the search page to trigger an AI search for this meal name
+      // We do this by passing the meal name as a query parameter
       navigate(`/search?q=${encodeURIComponent(meal.meal)}&ai=true`);
     }
   };
