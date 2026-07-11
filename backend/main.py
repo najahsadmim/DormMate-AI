@@ -50,40 +50,28 @@ except FileNotFoundError:
 @app.post("/recommend")
 async def recommend(request: RecommendationRequest):
     try:
-        # STRICTOR SYSTEM PROMPT
         system_prompt = (
-            "You are a strict JSON API for DormMate AI. You do not chat. You do not explain. "
-            "You only return valid JSON. \n\n"
-            "RULES:\n"
-            "1. SAFETY: Never suggest ingredients the user is allergic to.\n"
-            "2. EQUIPMENT: Only suggest recipes matching the user's tools.\n"
-            "3. DATABASE FIRST: Check the RECIPE DATABASE. If a match exists, return its ID.\n"
-            "4. GENERATION SECOND: If NO match exists in the database, you MUST invent a new recipe. "
-            "Do NOT tell the user you couldn't find one. Just invent the best possible one.\n"
-            "5. OUTPUT FORMAT: You must return ONLY a JSON object. No conversational text.\n\n"
-            "FORMAT EXAMPLES:\n"
-            "Option A (Existing): {\"type\": \"recommendation\", \"results\": [{\"id\": 1, \"reason\": \"High protein and fits budget\"}]}\n"
-            "Option B (Generated): {\"type\": \"generated\", \"recipe\": {\"title\": \"Strawberry Protein Shake\", \"ingredients\": [\"1 cup Strawberries\", \"1 scoop Protein Powder\", \"1 cup Milk\"], \"steps\": [\"Blend all ingredients until smooth\"], \"estimatedCost\": 50, \"calories\": 300, \"protein\": 25, \"cookingTime\": 5, \"difficulty\": \"Very Easy\", \"aiReason\": \"Custom created for your protein request\"}}"
+            "You are the DormMate AI Engine. Expert in student nutrition and budget. "
+            "RULES: \n"
+            "1. SAFETY: NEVER suggest ingredients the user is allergic to.\n"
+            "2. EQUIPMENT: Only suggest recipes matching user's tools. If none, suggest 'no-cook' meals.\n"
+            "3. LOGIC: First, check the RECIPE DATABASE. If no perfect match, GENERATE a new recipe.\n"
+            "4. OUTPUT: Respond ONLY with a JSON object: "
+            "{\"type\": \"recommendation\", \"results\": [{\"id\": 1, \"reason\": \"...\"}]} "
+            "OR {\"type\": \"generated\", \"recipe\": {\"title\": \"...\", \"ingredients\": [], \"steps\": [], \"estimatedCost\": 100, \"calories\": 400, \"protein\": 20, \"cookingTime\": 15, \"difficulty\": \"Easy\", \"aiReason\": \"...\"}}"
         )
-        
         user_prompt = f"USER PROFILE: {json.dumps(request.profile)}\nRECIPE DATABASE: {json.dumps(RECIPES_DB)}\nUSER QUERY: {request.query}"
         
         response = client.chat.completions.create(
-            model=TEXT_MODEL,
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_prompt}
-            ],
-            temperature=0.1, # <--- CRITICAL: Lower temperature = less chatting, more accuracy
+            model=MODEL_ID,
+            messages=[{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}],
+            temperature=0.7,
             response_format={"type": "json_object"}
         )
-        
-        ai_content = response.choices[0].message.content
-        return json.loads(ai_content)
-        
+        return json.loads(response.choices[0].message.content)
     except Exception as e:
-        print(f"Error in /recommend: {e}")
-        raise HTTPException(status_code=500, detail=f"AI Engine failure: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.post("/plan-week")
 async def plan_week(request: PlanRequest):
     try:
