@@ -91,7 +91,7 @@ const RecipeService = {
 
   getAIRecommendations: async (query, userProfile) => {
     try {
-      const response = await fetch('http://localhost:8000/recommend', {
+      const response = await fetch('https://dormmate-ai-backend.onrender.com', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query, profile: userProfile }),
