@@ -1,8 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../contexts/UserContext';
-// Import the centralized API URL from your service layer
-import { API_BASE_URL } from '../services/RecipeService'; 
 
 const MealPlanPage = () => {
   const { profile, user } = useContext(UserContext);
@@ -13,8 +11,7 @@ const MealPlanPage = () => {
   const generatePlan = async () => {
     setIsLoading(true);
     try {
-      // CHANGED: Now using the production API_BASE_URL instead of localhost
-      const response = await fetch(`${API_BASE_URL}/plan-week`, {
+      const response = await fetch('https://dormmate-ai-backend.onrender.com/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -23,34 +20,26 @@ const MealPlanPage = () => {
         }),
       });
       
-      if (!response.ok) {
-        throw new Error(`Server Error: ${response.status}`);
-      }
-      
+      if (!response.ok) throw new Error("AI Server Error");
       const data = await response.json();
-      
-      // Ensure data.plan exists before setting state
-      if (data && data.plan) {
-        setPlan(data.plan);
-      } else {
-        throw new Error("Invalid response format from AI");
-      }
+      setPlan(data.plan);
     } catch (e) {
       console.error("Planning error:", e);
-      alert("Failed to generate plan. Please check if the backend is awake or try again in a moment!");
+      alert("Failed to generate plan. Make sure the backend is running!");
     } finally {
       setIsLoading(false);
     }
   };
 
-  // SMART ROUTING LOGIC (Directs user to Recipe or AI Search)
+  // SMART ROUTING LOGIC
   const handleMealClick = (meal) => {
     if (meal.id) {
-      // If the AI gave us a database ID, go straight to the recipe details
+      // If the AI gave us a database ID, go straight to the recipe
       navigate(`/recipe/${meal.id}`);
     } else {
       // If it's a generated meal, we send them to search 
-      // and trigger an AI search for this specific meal name
+      // and tell the search page to trigger an AI search for this meal name
+      // We do this by passing the meal name as a query parameter
       navigate(`/search?q=${encodeURIComponent(meal.meal)}&ai=true`);
     }
   };
@@ -59,10 +48,7 @@ const MealPlanPage = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-[70vh] text-center font-poppins px-6">
         <h2 className="text-3xl font-bold text-tangerine mb-4">Please Sign In</h2>
-        <p className="text-forestGreen mb-8">You need an account to generate a personalized meal plan.</p>
-        <a href="/login" className="bg-forestGreen text-white px-8 py-3 rounded-full font-bold hover:bg-green-700 transition">
-          Login Now
-        </a>
+        <a href="/login" className="bg-forestGreen text-white px-8 py-3 rounded-full font-bold">Login Now</a>
       </div>
     );
   }
@@ -80,15 +66,7 @@ const MealPlanPage = () => {
           disabled={isLoading}
           className="bg-forestGreen text-white px-10 py-4 rounded-full font-bold hover:bg-green-700 transition shadow-lg disabled:opacity-50 flex items-center gap-2 mx-auto"
         >
-          {isLoading ? (
-            <>
-              <span className="animate-spin">🌀</span> Thinking...
-            </>
-          ) : (
-            <>
-              <span>✨</span> Generate My Week
-            </>
-          )}
+          {isLoading ? "🌀 Thinking..." : "✨ Generate My Week"}
         </button>
       </div>
 
@@ -100,9 +78,7 @@ const MealPlanPage = () => {
               onClick={() => handleMealClick(day)}
               className="bg-white border border-gray-100 p-5 rounded-3xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer border-t-4 border-t-tangerine group"
             >
-              <h4 className="text-tangerine font-bold text-lg mb-3 group-hover:scale-105 transition-transform">
-                {day.day}
-              </h4>
+              <h4 className="text-tangerine font-bold text-lg mb-3 group-hover:scale-105 transition-transform">{day.day}</h4>
               <div className="space-y-3">
                 <div>
                   <p className="text-forestGreen font-bold text-sm leading-tight group-hover:text-tangerine transition-colors">
