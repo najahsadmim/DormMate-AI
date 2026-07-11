@@ -8,7 +8,7 @@
 
 DormMate AI is an AI-powered kitchen assistant designed for students living in dormitories or away from home. It helps users prepare affordable, nutritious, and sustainable meals by understanding their dietary needs, budget, cooking preferences, and available ingredients.
 
-Built for the **AMD x LabLab AI Hackathon**, DormMate AI leverages **Gemma** to provide personalized recipe recommendations, intelligent ingredient substitutions, and AI-powered nutrition insights while promoting healthier eating habits and reducing food waste.
+Built for the **AMD x LabLab AI Hackathon**, DormMate AI leverages **Llama** to provide personalized recipe recommendations, intelligent ingredient substitutions, and AI-powered nutrition insights while promoting healthier eating habits and reducing food waste.
 
 ---
 
@@ -46,7 +46,7 @@ to recommend meals that are affordable, healthy, and realistic to prepare.
 ## Key Features
 
 - **AI-Personalized Homepage** with dynamic recipe recommendations
-- **Natural Language Recipe Search** powered by Gemma
+- **Natural Language Recipe Search** powered by Llama
 - **Pantry Scanner** that detects available ingredients from an image
 - **Smart Ingredient Substitutions** to reduce unnecessary shopping
 - **Budget-Aware Meal Recommendations** with estimated recipe costs
@@ -111,8 +111,8 @@ DormMate AI contributes to three United Nations Sustainable Development Goals by
 - React Router
 
 **AI**
-- Gemma
-- Fireworks AI
+- Llama 3.1
+- Groq
 
 **Computer Vision**
 - AI-powered ingredient detection for pantry scanning
