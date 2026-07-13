@@ -1,107 +1,89 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import RecipeService from '../services/RecipeService';
-import { UserContext } from '../contexts/UserContext';
+import recipes from '../data/recipes.json';
 
-const RecipeDetails = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const { profile } = useContext(UserContext);
-  const [substitution, setSubstitution] = useState(null);
-  const [isLoadingSub, setIsLoadingSub] = useState(false);
-  const [aiInsight, setAiInsight] = useState("");
-  const [isLoadingInsight, setIsLoadingInsight] = useState(true);
+const API_BASE_URL = 'https://dormmate-ai-backend.onrender.com';
 
-  const recipe = RecipeService.getRecipeById(id);
+const RecipeService = {
+  getAllRecipes: () => recipes,
+  
+  // FIXED: Now handles both database IDs and AI-generated objects
+  getRecipeById: (id) => {
+    if (!id) return null;
+    // If the 'id' passed is actually the whole recipe object (common with AI generation)
+    if (typeof id === 'object') return id; 
+    
+    return recipes.find(recipe => recipe.id === parseInt(id));
+  },
 
-  useEffect(() => {
-    const fetchInsight = async () => {
-      try {
-        const response = await fetch('https://dormmate-ai-backend.onrender.com/recommend', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ 
-            query: `Why is ${recipe?.title} good for ${profile?.nutritionGoal || 'health'}?`, 
-            profile 
-          }),
-        });
-        const data = await response.json();
-        setAiInsight(data.results?.[0]?.reason || "A healthy and budget-friendly choice!");
-      } catch (e) {
-        setAiInsight("A nutritious choice for your goals!");
-      } finally {
-        setIsLoadingInsight(false);
+  getFeaturedRecipe: () => recipes[Math.floor(Math.random() * recipes.length)],
+
+  filterRecipes: (filters = {}, userProfile = {}) => {
+    const f = filters || {};
+    const p = userProfile || {};
+    return recipes.filter(recipe => {
+      if (!recipe) return false;
+      if (f.maxBudget && recipe.estimatedCost > f.maxBudget) return false;
+      if (f.maxCalories && recipe.calories > f.maxCalories) return false;
+      if (f.minProtein && recipe.protein < f.minProtein) return false;
+      if (f.maxTime && recipe.cookingTime > f.maxTime) return false;
+      const tags = recipe.tags || [];
+      if (p.dietaryPreferences && Array.isArray(p.dietaryPreferences) && p.dietaryPreferences.length > 0) {
+        if (!p.dietaryPreferences.every(pref => tags.includes(pref))) return false;
       }
-    };
-    if (recipe) fetchInsight();
-  }, [recipe, profile]);
+      const ingredients = recipe.ingredients || [];
+      if (p.allergies) {
+        const allergiesList = p.allergies.toLowerCase().split(',').map(a => a.trim());
+        if (ingredients.some(ing => allergiesList.some(allergy => String(ing).toLowerCase().includes(allergy)))) return false;
+      }
+      const recipeEquip = recipe.equipment || [];
+      const userEquip = p.equipment || [];
+      if (userEquip.length > 0 && !recipeEquip.every(item => userEquip.includes(item))) return false;
+      return true;
+    });
+  },
 
-  const handleSubstitute = async (ingredient) => {
-    setIsLoadingSub(true);
+  getAIRecommendations: async (query, userProfile) => {
     try {
-      const response = await fetch('https://dormmate-ai-backend.onrender.com/substitute', {
+      const response = await fetch(`${API_BASE_URL}/recommend`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ingredient, recipe_title: recipe.title, profile }),
+        body: JSON.stringify({ query, profile: userProfile }),
       });
-      const data = await response.json();
-      setSubstitution(data);
-    } catch (e) {
-      alert("Substitution failed.");
-    } finally {
-      setIsLoadingSub(false);
+      if (!response.ok) throw new Error('AI Server Error');
+      const data = await response.json(); 
+
+      if (data.type === 'recommendation') {
+        return (data.results || []).map(choice => {
+          const recipe = RecipeService.getRecipeById(choice.id);
+          return recipe ? { ...recipe, aiReason: choice.reason } : null;
+        }).filter(Boolean);
+      }
+      if (data.type === 'generated') {
+        // Pass the whole recipe object so getRecipeById doesn't fail
+        return [{ ...data.recipe, aiReason: data.recipe.aiReason || "AI Generated" }]; 
+      }
+      return [];
+    } catch (error) {
+      console.error("AI Error:", error);
+      return []; 
     }
-  };
+  },
 
-  if (!recipe) return <div className="text-center py-20 text-4xl">Recipe Not Found</div>;
-
-  return (
-    <div className="px-6 py-12 max-w-4xl mx-auto font-poppins">
-      <button onClick={() => navigate(-1)} className="text-forestGreen font-bold mb-6">← Back</button>
-      <div className="bg-white rounded-3xl overflow-hidden shadow-xl border border-gray-100">
-        <img src={recipe.image} alt={recipe.title} className="w-full h-96 object-cover" />
-        <div className="p-8">
-          <div className="mb-8 p-4 bg-orange-50 border-l-4 border-tangerine italic text-sm text-tangerine">
-            {isLoadingInsight ? "✨ AI is analyzing..." : `✨ AI Insight: ${aiInsight}`}
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div>
-              <h3 className="text-2xl font-bold text-forestGreen mb-6">🛒 Ingredients</h3>
-              <ul className="space-y-3">
-                {recipe.ingredients.map((item, i) => (
-                  <li key={i} className="flex items-center justify-between group py-1 border-b border-gray-50">
-                    <span>{item}</span>
-                    <button onClick={() => handleSubstitute(item)} className="opacity-0 group-hover:opacity-100 text-[10px] bg-gray-100 px-2 py-1 rounded hover:bg-tangerine hover:text-white transition">Substitute?</button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-2xl font-bold text-forestGreen mb-6">🍳 Steps</h3>
-              <div className="space-y-6">
-                {recipe.steps.map((step, i) => (
-                  <div key={i} className="flex gap-4">
-                    <span className="w-8 h-8 bg-tangerine text-white rounded-full flex items-center justify-center font-bold">{i+1}</span>
-                    <p className="text-gray-600">{step}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {substitution && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-6">
-          <div className="bg-white p-8 rounded-3xl max-w-sm w-full text-center animate-fadeIn">
-            <h4 className="text-xl font-bold text-forestGreen mb-2">Smart Substitution</h4>
-            <div className="text-2xl font-bold text-tangerine mb-4">{substitution.substitute}</div>
-            <p className="text-sm text-gray-400 italic mb-6">{substitution.reason}</p>
-            <button onClick={() => setSubstitution(null)} className="w-full bg-forestGreen text-white py-2 rounded-xl font-bold">Got it!</button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+  scanPantry: async (imageFile) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', imageFile);
+      const response = await fetch(`${API_BASE_URL}/scan-pantry`, {
+        method: 'POST',
+        body: formData,
+      });
+      if (!response.ok) throw new Error('Vision Server Error');
+      const data = await response.json();
+      return data.ingredients;
+    } catch (error) {
+      console.error("Pantry Scan Error:", error);
+      throw error;
+    }
+  }
 };
 
-export default RecipeDetails;
+export default RecipeService;
