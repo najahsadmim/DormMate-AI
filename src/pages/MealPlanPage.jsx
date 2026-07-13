@@ -11,7 +11,7 @@ const MealPlanPage = () => {
   const generatePlan = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('https://dormmate-ai-backend.onrender.com/', {
+      const response = await fetch('http://localhost:8000/plan-week', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
