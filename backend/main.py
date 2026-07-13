@@ -1,34 +1,23 @@
 import os
-import json
-import base64
-from fastapi import FastAPI, HTTPException, UploadFile, File
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from openai import OpenAI
 from dotenv import load_dotenv
+import json
 
-# =============================================================================
-# 1. CONFIGURATION
-# =============================================================================
 load_dotenv()
 
-AI_API_KEY = os.getenv("AI_API_KEY")
-AI_BASE_URL = os.getenv("AI_BASE_URL")
-TEXT_MODEL = os.getenv("TEXT_MODEL_ID")
-VISION_MODEL = os.getenv("VISION_MODEL_ID")
-
-if not AI_API_KEY:
-    print("❌ FATAL ERROR: AI_API_KEY missing in .env")
-    exit(1)
-
-# Groq Client (OpenAI compatible)
+# Configure AI Client
 client = OpenAI(
-    base_url=AI_BASE_URL,
-    api_key=AI_API_KEY
+    base_url=os.getenv("AI_BASE_URL"),
+    api_key=os.getenv("AI_API_KEY")
 )
+MODEL_ID = os.getenv("AI_MODEL_ID")
 
-app = FastAPI(title="DormMate AI Groq-Powered Backend")
+app = FastAPI()
 
+# Enable CORS for React communication
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], 
@@ -36,9 +25,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# =============================================================================
-# 2. DATA MODELS & DATABASE
-# =============================================================================
+# Data Models
 class RecommendationRequest(BaseModel):
     query: str
     profile: dict
@@ -52,112 +39,82 @@ class SubstituteRequest(BaseModel):
     recipe_title: str
     profile: dict
 
+# Load recipes once at startup
 try:
     with open("../src/data/recipes.json", "r") as f:
         RECIPES_DB = json.load(f)
 except FileNotFoundError:
     RECIPES_DB = []
-
-# =============================================================================
-# 3. REASONING ENDPOINTS (Llama 3.3 - High Intelligence)
-# =============================================================================
+    print("Warning: recipes.json not found.")
 
 @app.post("/recommend")
 async def recommend(request: RecommendationRequest):
     try:
         system_prompt = (
-            "You are the DormMate AI Engine. You MUST respond ONLY with a valid JSON object. "
-            "Rules: No allergies, match equipment, check DB first, then generate. "
-            "Format: {\"type\": \"recommendation\", \"results\": [{\"id\": 1, \"reason\": \"...\"}]} "
+            "You are the DormMate AI Engine. Expert in student nutrition and budget. "
+            "RULES: \n"
+            "1. SAFETY: NEVER suggest ingredients the user is allergic to.\n"
+            "2. EQUIPMENT: Only suggest recipes matching user's tools. If none, suggest 'no-cook' meals.\n"
+            "3. LOGIC: First, check the RECIPE DATABASE. If no perfect match, GENERATE a new recipe.\n"
+            "4. OUTPUT: Respond ONLY with a JSON object: "
+            "{\"type\": \"recommendation\", \"results\": [{\"id\": 1, \"reason\": \"...\"}]} "
             "OR {\"type\": \"generated\", \"recipe\": {\"title\": \"...\", \"ingredients\": [], \"steps\": [], \"estimatedCost\": 100, \"calories\": 400, \"protein\": 20, \"cookingTime\": 15, \"difficulty\": \"Easy\", \"aiReason\": \"...\"}}"
         )
         user_prompt = f"USER PROFILE: {json.dumps(request.profile)}\nRECIPE DATABASE: {json.dumps(RECIPES_DB)}\nUSER QUERY: {request.query}"
         
         response = client.chat.completions.create(
-            model=TEXT_MODEL,
+            model=MODEL_ID,
             messages=[{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}],
             temperature=0.7,
-            # Groq doesn't always support response_format={"type": "json_object"}, 
-            # so we emphasize it in the system prompt.
+            response_format={"type": "json_object"}
         )
         return json.loads(response.choices[0].message.content)
     except Exception as e:
-        print(f"Recommend Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/plan-week")
 async def plan_week(request: PlanRequest):
     try:
         system_prompt = (
-            "You are the DormMate AI Meal Planner. You MUST respond ONLY with a valid JSON object. "
-            "Format: {\"plan\": [{\"day\": \"Monday\", \"meal\": \"Recipe Name\", \"cost\": 100, \"reason\": \"...\"}, ...]}"
+            "You are the DormMate AI Meal Planner. Create a balanced 7-day meal plan. "
+            "RULES: \n"
+            "1. Budget: Total weekly cost must fit user's budget preference.\n"
+            "2. Nutrition: Align with user's nutrition goal.\n"
+            "3. OUTPUT: Respond ONLY with JSON: {\"plan\": [{\"day\": \"Monday\", \"meal\": \"Recipe Name\", \"cost\": 100, \"reason\": \"...\"}, ...]}"
         )
         user_prompt = f"USER PROFILE: {json.dumps(request.profile)}. Create a {request.duration_days}-day plan."
         
         response = client.chat.completions.create(
-            model=TEXT_MODEL,
+            model=MODEL_ID,
             messages=[{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}],
             temperature=0.7,
+            response_format={"type": "json_object"}
         )
         return json.loads(response.choices[0].message.content)
     except Exception as e:
-        print(f"Plan Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/substitute")
 async def substitute(request: SubstituteRequest):
     try:
         system_prompt = (
-            "You are the DormMate AI Kitchen Assistant. You MUST respond ONLY with a valid JSON object. "
-            "Format: {\"substitute\": \"Ingredient Name\", \"reason\": \"...\"}"
+            "You are the DormMate AI Kitchen Assistant. Suggest a substitution for a missing ingredient. "
+            "RULES: \n"
+            "1. Context: The substitute must work for the specific recipe provided.\n"
+            "2. Profile: Ensure the substitute doesn't trigger user allergies.\n"
+            "3. OUTPUT: Respond ONLY with JSON: {\"substitute\": \"Ingredient Name\", \"reason\": \"...\"}"
         )
         user_prompt = f"RECIPE: {request.recipe_title}. MISSING: {request.ingredient}. USER PROFILE: {json.dumps(request.profile)}."
         
         response = client.chat.completions.create(
-            model=TEXT_MODEL,
+            model=MODEL_ID,
             messages=[{"role": "system", "content": system_prompt}, {"role": "user", "content": user_prompt}],
             temperature=0.3,
+            response_format={"type": "json_object"}
         )
         return json.loads(response.choices[0].message.content)
     except Exception as e:
-        print(f"Substitute Error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
-
-# =============================================================================
-# 4. VISION ENDPOINT (LLaVA - Fast Multimodal)
-# =============================================================================
-
-@app.post("/scan-pantry")
-async def scan_pantry(file: UploadFile = File(...)):
-    try:
-        contents = await file.read()
-        base64_image = base64.b64encode(contents).decode('utf-8')
-
-        response = client.chat.completions.create(
-            model=VISION_MODEL,
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": "List only the food ingredients you see in this image. Respond ONLY as a comma-separated list. Example: Eggs, Tomato, Onion, Rice. No conversational text."},
-                        {
-                        "type": "image_url",
-                        "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}
-                        },
-                    ],
-                }
-            ],
-            max_tokens=300,
-        )
-
-        ingredients_text = response.choices[0].message.content
-        ingredients_list = [i.strip() for i in ingredients_text.split(",")]
-
-        return {"ingredients": ingredients_list}
-
-    except Exception as e:
-        print(f"Vision Error: {e}")
-        raise HTTPException(status_code=500, detail=f"Vision AI failed: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn
