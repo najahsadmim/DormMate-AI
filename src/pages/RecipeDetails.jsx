@@ -16,11 +16,10 @@ const RecipeDetails = () => {
 
   const recipe = RecipeService.getRecipeById(id);
 
-  // Effect: Fetch AI Nutrition Insight based on User's Goal
   useEffect(() => {
     const fetchInsight = async () => {
       try {
-        const response = await fetch('http://localhost:8000/recommend', {
+        const response = await fetch('https://dormmate-ai-backend.onrender.com/recommend', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
@@ -40,17 +39,37 @@ const RecipeDetails = () => {
   }, [recipe, profile]);
 
   const handleSubstitute = async (ingredient) => {
+    console.log("🎯 Requesting substitute for:", ingredient);
     setIsLoadingSub(true);
     try {
-      const response = await fetch('http://localhost:8000/substitute', {
+      const response = await fetch('https://dormmate-ai-backend.onrender.com/substitute', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ingredient, recipe_title: recipe.title, profile }),
+        body: JSON.stringify({ 
+          ingredient: ingredient, 
+          recipe_title: recipe.title, 
+          profile: profile 
+        }),
       });
+
+      if (!response.ok) throw new Error("Server Error");
+      
       const data = await response.json();
-      setSubstitution(data);
+      console.log("🤖 AI Response received:", data);
+
+      // VALIDATION: Check if the AI used the correct keys
+      if (data.substitute && data.reason) {
+        setSubstitution({
+          substitute: data.substitute,
+          reason: data.reason
+        });
+      } else {
+        console.error("❌ AI returned wrong keys:", data);
+        alert("AI provided an invalid response format. Please try again.");
+      }
     } catch (e) {
-      alert("AI substitution failed. Please try again.");
+      console.error("Substitution Error:", e);
+      alert("AI substitution failed. Check if backend is running.");
     } finally {
       setIsLoadingSub(false);
     }
@@ -81,7 +100,6 @@ const RecipeDetails = () => {
         </div>
         
         <div className="p-8">
-          {/* AI Nutrition Insight Box */}
           <div className="mb-8 p-4 bg-orange-50 border-l-4 border-tangerine rounded-r-xl italic text-sm text-tangerine font-medium">
             {isLoadingInsight ? "✨ AI is analyzing nutrition..." : `✨ AI Insight: ${aiInsight}`}
           </div>
@@ -97,15 +115,16 @@ const RecipeDetails = () => {
               <h3 className="text-2xl font-bold text-forestGreen mb-6 flex items-center gap-2">🛒 Ingredients</h3>
               <ul className="space-y-3">
                 {recipe.ingredients.map((item, i) => (
-                  <li key={i} className="flex items-center justify-between group py-1">
+                  <li key={i} className="flex items-center justify-between group py-1 border-b border-gray-50">
                     <div className="flex items-start gap-3 text-gray-600">
                       <span className="text-tangerine font-bold">•</span> {item}
                     </div>
                     <button 
                       onClick={() => handleSubstitute(item)}
+                      disabled={isLoadingSub}
                       className="opacity-0 group-hover:opacity-100 text-[10px] bg-gray-100 px-2 py-1 rounded hover:bg-tangerine hover:text-white transition font-bold"
                     >
-                      Substitute?
+                      {isLoadingSub ? "..." : "Substitute?"}
                     </button>
                   </li>
                 ))}
@@ -127,13 +146,12 @@ const RecipeDetails = () => {
         </div>
       </div>
 
-      {/* Substitution Modal */}
       {substitution && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[9999] p-6">
           <div className="bg-white p-8 rounded-3xl max-w-sm w-full text-center animate-fadeIn shadow-2xl">
             <div className="text-4xl mb-4">💡</div>
             <h4 className="text-xl font-bold text-forestGreen mb-2">Smart Substitution</h4>
-            <p className="text-gray-600 mb-4">Instead of {substitution.ingredient || 'this ingredient'}, use:</p>
+            <p className="text-gray-600 mb-4">Instead of the missing ingredient, use:</p>
             <div className="text-2xl font-bold text-tangerine mb-4">{substitution.substitute}</div>
             <p className="text-sm text-gray-400 italic mb-6">{substitution.reason}</p>
             <button 
