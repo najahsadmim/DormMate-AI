@@ -1,0 +1,18 @@
+# Environment variables (SECRET KEYS)
+.env
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Node modules (too big to upload)
+node_modules/
+
+# Build folders
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
