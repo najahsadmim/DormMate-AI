@@ -11,8 +11,7 @@ const MealPlanPage = () => {
   const generatePlan = async () => {
     setIsLoading(true);
     try {
-      // FIXED: Added /plan-week to the end of the URL
-      const response = await fetch('https://dormmate-ai-backend.onrender.com/plan-week', {
+      const response = await fetch('https://dormmate-ai-backend.onrender.com/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
@@ -32,10 +31,15 @@ const MealPlanPage = () => {
     }
   };
 
+  // SMART ROUTING LOGIC
   const handleMealClick = (meal) => {
     if (meal.id) {
+      // If the AI gave us a database ID, go straight to the recipe
       navigate(`/recipe/${meal.id}`);
     } else {
+      // If it's a generated meal, we send them to search 
+      // and tell the search page to trigger an AI search for this meal name
+      // We do this by passing the meal name as a query parameter
       navigate(`/search?q=${encodeURIComponent(meal.meal)}&ai=true`);
     }
   };
@@ -56,6 +60,7 @@ const MealPlanPage = () => {
         <p className="text-forestGreen font-semibold mb-8">
           Customized for your {profile?.nutritionGoal || 'health'} goal.
         </p>
+        
         <button 
           onClick={generatePlan}
           disabled={isLoading}
